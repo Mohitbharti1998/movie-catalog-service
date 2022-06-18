@@ -28,26 +28,6 @@ import org.springframework.web.reactive.function.client.WebClient;
         @Autowired
         private Response response;
 
-        @RequestMapping("/insertMovieDetails")
-        public Object insertUserRating(@RequestBody MovieCatalog insert) {
-            MovieCatalog rating;
-            try {
-                MovieInfo movieInfo = insert.getOtherDetails();
-                System.out.println(movieInfo);
-                rating = movieCatalogRepositroy.insert(insert);
-                response.setStatus("success");
-                response.setError(null);
-                response.setData(rating);
-                return response;
-            } catch (org.springframework.dao.DuplicateKeyException error) {
-                response.setStatus("failure");
-                response.setError("Already data present with this Id");
-                response.setData(insert);
-                return response;
-            }
-
-        }
-
 
 
 
