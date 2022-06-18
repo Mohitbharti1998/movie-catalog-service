@@ -1,11 +1,14 @@
 package io.springapplication.moviecatalogservice.models;
 
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "movieCatalog")
 public class MovieCatalog {
 
+
+    @Id
     private String movieCode;
 
     private String name;
@@ -14,7 +17,7 @@ public class MovieCatalog {
 
     private String duration;
 
-    private  MovieInfo otherDetails;
+    private MovieInfo otherDetails;
 
     public MovieInfo getOtherDetails() {
         return otherDetails;
@@ -24,9 +27,17 @@ public class MovieCatalog {
         this.otherDetails = otherDetails;
     }
 
+    public void destroyOtherDetails(){
+        this.otherDetails = null;
+    }
+
+
+
     public String getMovieCode() {
         return movieCode;
     }
+
+
 
     public void setMovieCode(String movieCode) {
         this.movieCode = movieCode;
