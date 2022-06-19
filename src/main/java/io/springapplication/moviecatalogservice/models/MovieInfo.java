@@ -1,6 +1,7 @@
 package io.springapplication.moviecatalogservice.models;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 @Component
 public class MovieInfo {
 
+    @Id
     private ObjectId id;
 
     private List<String> type;

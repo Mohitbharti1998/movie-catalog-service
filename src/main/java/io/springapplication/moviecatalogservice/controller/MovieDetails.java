@@ -1,12 +1,14 @@
 package io.springapplication.moviecatalogservice.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.springapplication.moviecatalogservice.models.MovieCatalog;
 import io.springapplication.moviecatalogservice.models.MovieInfo;
 import io.springapplication.moviecatalogservice.models.Response;
 import io.springapplication.moviecatalogservice.repository.MovieCatalogRepositroy;
 import org.bson.types.ObjectId;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,8 +37,8 @@ public class MovieDetails {
         movieInfo = insert.getOtherDetails();
         insert.destroyOtherDetails();
         try {
-            ObjectId correlationId = insertOtherDetails();
-            movieCatalog.setCorrelationId(String.valueOf(correlationId));
+            String correlationId = insertOtherDetails();
+            System.out.println(correlationId);
             movieCatalog = movieCatalogRepositroy.insert(insert);
             response.setStatus("success");
             response.setError(null);
@@ -44,20 +46,19 @@ public class MovieDetails {
         } catch (org.springframework.dao.DuplicateKeyException error) {
             response.setStatus("failure");
             response.setError("Duplicate Code");
-            response.setData(insert);
             return response;
         }catch (Exception ex){
-            response.setStatus("failure");
+            response.setStatus("failure" + ex);
             response.setError(null);
             return response;
         }
 
     }
 
-    public ObjectId insertOtherDetails(){
-        String url = "localhost:8082/movieInfo/insert";
-        ResponseEntity<MovieInfo> movieInfoResponseEntity = restTemplate.postForEntity(url,movieInfo,MovieInfo.class);
-        return movieInfoResponseEntity.getBody().getId();
-
+    public String insertOtherDetails() throws JSONException {
+        String url = "http://localhost:8082/movieInfo/insert";
+        String movie = restTemplate.postForObject(url,movieInfo,String.class);
+        JSONObject jsonObject = new JSONObject(movie);
+        return  jsonObject.getJSONObject("data").getString("id");
     }
 }
