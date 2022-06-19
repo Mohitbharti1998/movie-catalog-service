@@ -17,6 +17,8 @@ public class MovieCatalog {
 
     private String duration;
 
+    private String correlationId;
+
     private MovieInfo otherDetails;
 
     public MovieInfo getOtherDetails() {
@@ -31,7 +33,13 @@ public class MovieCatalog {
         this.otherDetails = null;
     }
 
+    public String getCorrelationId() {
+        return correlationId;
+    }
 
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+    }
 
     public String getMovieCode() {
         return movieCode;

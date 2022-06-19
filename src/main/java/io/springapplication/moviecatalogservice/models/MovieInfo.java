@@ -1,5 +1,6 @@
 package io.springapplication.moviecatalogservice.models;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -8,8 +9,7 @@ import java.util.List;
 @Component
 public class MovieInfo {
 
-
-    private Long movieId;
+    private ObjectId id;
 
     private List<String> type;
 
@@ -21,13 +21,14 @@ public class MovieInfo {
 
     private List<String> stars;
 
-    public Long getMovieId() {
-        return movieId;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setMovieId(Long movieId) {
-        this.movieId = movieId;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
+
 
     public List<String> getType() {
         return type;

@@ -4,6 +4,7 @@ import io.springapplication.moviecatalogservice.models.MovieCatalog;
 import io.springapplication.moviecatalogservice.models.MovieInfo;
 import io.springapplication.moviecatalogservice.models.Response;
 import io.springapplication.moviecatalogservice.repository.MovieCatalogRepositroy;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,8 @@ public class MovieDetails {
         movieInfo = insert.getOtherDetails();
         insert.destroyOtherDetails();
         try {
-            Long correlationId = insertOtherDetails();
+            ObjectId correlationId = insertOtherDetails();
+            movieCatalog.setCorrelationId(String.valueOf(correlationId));
             movieCatalog = movieCatalogRepositroy.insert(insert);
             response.setStatus("success");
             response.setError(null);
@@ -52,10 +54,10 @@ public class MovieDetails {
 
     }
 
-    public Long insertOtherDetails(){
+    public ObjectId insertOtherDetails(){
         String url = "localhost:8082/movieInfo/insert";
         ResponseEntity<MovieInfo> movieInfoResponseEntity = restTemplate.postForEntity(url,movieInfo,MovieInfo.class);
-        return movieInfoResponseEntity.getBody().getMovieId();
+        return movieInfoResponseEntity.getBody().getId();
 
     }
 }
