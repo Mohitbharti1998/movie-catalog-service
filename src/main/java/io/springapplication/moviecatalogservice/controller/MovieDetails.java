@@ -38,7 +38,7 @@ public class MovieDetails {
         insert.destroyOtherDetails();
         try {
             String correlationId = insertOtherDetails();
-            System.out.println(correlationId);
+            insert.setCorrelationId(correlationId);
             movieCatalog = movieCatalogRepositroy.insert(insert);
             response.setStatus("success");
             response.setError(null);
