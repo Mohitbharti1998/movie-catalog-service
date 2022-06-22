@@ -5,6 +5,7 @@ import io.springapplication.moviecatalogservice.models.MovieCatalog;
 import io.springapplication.moviecatalogservice.models.MovieInfo;
 import io.springapplication.moviecatalogservice.models.Response;
 import io.springapplication.moviecatalogservice.repository.MovieCatalogRepositroy;
+import io.springapplication.moviecatalogservice.utils.AppUtils;
 import org.bson.types.ObjectId;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +38,7 @@ public class MovieDetails {
         movieInfo = insert.getOtherDetails();
         insert.destroyOtherDetails();
         try {
-            String correlationId = insertOtherDetails();
+            String correlationId = AppUtils.generateUniqueId();
             insert.setCorrelationId(correlationId);
             movieCatalog = movieCatalogRepositroy.insert(insert);
             response.setStatus("success");
@@ -55,10 +56,10 @@ public class MovieDetails {
 
     }
 
-    public String insertOtherDetails() throws JSONException {
-        String url = "http://localhost:8082/movieInfo/insert";
-        String movie = restTemplate.postForObject(url,movieInfo,String.class);
-        JSONObject jsonObject = new JSONObject(movie);
-        return  jsonObject.getJSONObject("data").getString("id");
-    }
+//    public String insertOtherDetails() throws JSONException {
+//        String url = "http://localhost:8082/movieInfo/insert";
+//        String movie = restTemplate.postForObject(url,movieInfo,String.class);
+//        JSONObject jsonObject = new JSONObject(movie);
+//        return  jsonObject.getJSONObject("data").getString("id");
+//    }
 }
