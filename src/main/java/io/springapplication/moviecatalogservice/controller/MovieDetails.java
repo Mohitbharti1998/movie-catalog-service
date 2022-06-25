@@ -1,57 +1,50 @@
 package io.springapplication.moviecatalogservice.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.springapplication.moviecatalogservice.models.MovieCatalog;
-import io.springapplication.moviecatalogservice.models.MovieInfo;
-import io.springapplication.moviecatalogservice.models.Response;
-import io.springapplication.moviecatalogservice.repository.MovieCatalogRepositroy;
-import io.springapplication.moviecatalogservice.utils.AppUtils;
-import org.bson.types.ObjectId;
-import org.json.JSONException;
-import org.json.JSONObject;
+import io.springapplication.moviecatalogservice.service.MovieCatalogService;
+import io.springapplication.moviecatalogservice.vo.MovieCatalogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/movieDetails")
 public class MovieDetails {
 
-    @Autowired
-    private MovieCatalogRepositroy movieCatalogRepositroy;
+    private final MovieCatalogService movieCatalogService;
 
     @Autowired
-    private RestTemplate restTemplate;
+    public MovieDetails(final MovieCatalogService movieCatalogService) {
+        this.movieCatalogService = movieCatalogService;
+    }
 
-    @Autowired
-    private Response response;
-
-    @Autowired
-    private MovieInfo movieInfo;
-
-    private MovieCatalog movieCatalog;
+//    @Autowired
+//    private MovieCatalogRepositroy movieCatalogRepositroy;
+//
+//    @Autowired
+//    private RestTemplate restTemplate;
+//
+//    @Autowired
+//    private Response response;
+//
+//    @Autowired
+//    private MovieInfo movieInfo;
+//
+//    private MovieCatalog movieCatalog;
+//
+//    public MovieDetails() {
+//    }
 
     @RequestMapping("/insertMovieDetails")
-    public Response insertUserRating(@RequestBody MovieCatalog insert) {
-        movieInfo = insert.getOtherDetails();
-        insert.destroyOtherDetails();
-        try {
-            String correlationId = AppUtils.generateUniqueId();
-            insert.setCorrelationId(correlationId);
-            movieCatalog = movieCatalogRepositroy.insert(insert);
-            response.setStatus("success");
-            response.setError(null);
-            return response;
-        } catch (org.springframework.dao.DuplicateKeyException error) {
-            response.setStatus("failure");
-            response.setError("Duplicate Code");
-            return response;
-        }catch (Exception ex){
-            response.setStatus("failure" + ex);
-            response.setError(null);
-            return response;
+    public MovieCatalogVO insertUserRating(@RequestBody MovieCatalogVO movieCatalog) {
+
+        System.out.println(movieCatalog);
+
+        try{
+            return movieCatalogService.insertMovieDetails(movieCatalog);
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
 
     }
